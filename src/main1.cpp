@@ -6,7 +6,7 @@
 
 using namespace std;
 
-const size_t LARGE_SIZE = 980000;
+const size_t LARGE_SIZE = 500000;
 
 struct rnd {
     int operator()() {
@@ -14,30 +14,26 @@ struct rnd {
     }
 };
 
-int comp( const void* a, const void* b ) {
-    return ( *( int* )a - *( int* )b );
-}
-
 int main() {
     int arr[LARGE_SIZE];
     int arr_copy[LARGE_SIZE];
     // Рандомизация по таймеру
-//    for (int h = 1; h <= 50; h++) {
-        cout <<"\n";
+    for (int h = 1; h <= LARGE_SIZE; h=h+1000) {
+        cout <<h <<";";
         srand(time(nullptr));
         // генерируем случайные данные
-        generate(arr, arr + LARGE_SIZE, rnd());
-        copy(arr, arr + LARGE_SIZE, arr_copy);
+        generate(arr, arr + h, rnd());
+        copy(arr, arr + h, arr_copy);
         // засекаем время
         time_t start = clock();
         // выполняем сортировку, используя функцию qsort
-        qsort(arr, LARGE_SIZE, sizeof(int), comp);
-        cout << "C quick-sort time elapsed: " << static_cast<double>( clock() - start ) / CLOCKS_PER_SEC << "\n";
+        qsort(arr, h, sizeof(int), comp);
+        cout << static_cast<double>( clock() - start ) / CLOCKS_PER_SEC << ";";
         // снова засекаем время
         start = clock();
         // выполняем сортировку, используя алгоритм С++
-        sort(arr_copy, arr_copy + LARGE_SIZE);
-        cout << "C++ quick-sort time elapsed: " << static_cast<double>( clock() - start ) / CLOCKS_PER_SEC << "\n";
-//    }
+        sort(arr_copy, arr_copy + h);
+        cout << static_cast<double>( clock() - start ) / CLOCKS_PER_SEC << "\n";
+    }
     return 0;
 }
